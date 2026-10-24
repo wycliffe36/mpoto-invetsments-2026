@@ -1,15 +1,14 @@
 {
-  "name": "MPOTO INVESTMENTS - Hotel Management System 2026",
-  "short_name": "MPOTO 2026",
-  "description": "Full functional hotel management system for MPOTO INVESTMENTS GROUP - FoodPoint, Salon, Bar, Kitchen, Staff, Daily Report - All 2026 Excel data, Neon Edition, Offline",
+  "name": "FOODPOINT 2026 - FINAL PERFECT APP",
+  "short_name": "FOODPOINT2026",
+  "description": "All 2026 data - Barber 32 services - Drinks 48 - Staff - Expenses - Nothing left behind",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0f0c29",
-  "theme_color": "#ff9a00",
-  "orientation": "portrait-primary",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/1390/1390912.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/1995/1995515.png",
       "sizes": "512x512",
       "type": "image/png"
     }
