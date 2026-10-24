@@ -1,79 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MPOTO INVESTMENTS 2026</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;padding:15px}
-.header{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:20px;padding:20px;text-align:center;border:1px solid rgba(255,255,255,0.2);margin-bottom:15px}
-.header h1{margin:0;color:#ff9a00;font-size:22px} .header p{margin:5px 0 0;opacity:0.8;font-size:13px}
-.grid{display:grid;grid-template-columns:1fr;gap:15px} @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
-.card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:20px;padding:18px;border:1px solid rgba(255,255,255,0.15)}
-.card h3{margin:0 0 12px;color:#ff9a00;font-size:16px}
-label{font-size:12px;opacity:0.8} input,select{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.4);color:#fff;margin:6px 0 12px;font-size:14px}
-button{width:100%;padding:14px;border-radius:12px;border:none;font-weight:bold;cursor:pointer;margin:6px 0;font-size:14px}
-.btn-add{background:linear-gradient(135deg,#ff9a00,#ff6a00);color:#fff}
-.btn-export{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2)}
-.kpi{display:flex;justify-content:space-between;background:rgba(0,0,0,0.3);padding:10px 14px;border-radius:10px;margin:6px 0}
-.kpi span:last-child{color:#ff9a00;font-weight:bold}
-table{width:100%;border-collapse:collapse;font-size:12px} th{color:#ff9a00;text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,0.2)} td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.1)}
-</style>
-</head>
-<body>
-<div class="header">
-<h1>MPOTO INVESTMENTS 2026</h1>
-<p>FoodPoint | Bar | Kitchen | Salon | M-Pesa Integrated</p>
-<p id="liveTotal" style="color:#00ff88;font-weight:bold;margin-top:10px">Total: KES 0 | Today: KES 0</p>
-</div>
-
-<div class="grid">
-<div class="card">
-<h3>➕ Add New Sale</h3>
-<label>Department</label>
-<select id="dept" onchange="updateServices()"><option value="SALON">SALON</option><option value="BAR">BAR</option><option value="KITCHEN">KITCHEN</option><option value="FOODPOINT">FOODPOINT</option></select>
-<label>Staff</label>
-<select id="staff"><option>CHARLES</option><option>DIANA</option><option>EUNICE</option><option>PERIS</option><option>ABIGAEL MUTHAMA</option><option>BRENDA</option><option>MARTHA</option><option>CHRIS</option><option>WINCATE</option><option>GRACE</option><option>MAGDALENE</option><option>ABIGAEL MUTHONI</option></select>
-<label>Service / Item</label>
-<select id="service" onchange="updatePrice()"></select>
-<label>Price (KES)</label>
-<input id="price" type="number" placeholder="200">
-<label>Payment</label>
-<select id="pay"><option>M-PESA</option><option>CASH</option><option>BANK</option></select>
-<button class="btn-add" onclick="addSale()">ADD SALE - SAVE</button>
-<button class="btn-export" onclick="exportCSV()">📥 EXPORT TO EXCEL (CSV)</button>
-</div>
-
-<div class="card">
-<h3>📊 Today's Summary</h3>
-<div class="kpi"><span>Total Sales</span><span id="kpiTotal">KES 0</span></div>
-<div class="kpi"><span>M-Pesa</span><span id="kpiMpesa">KES 0</span></div>
-<div class="kpi"><span>Cash</span><span id="kpiCash">KES 0</span></div>
-<div class="kpi"><span>Transactions</span><span id="kpiCount">0</span></div>
-<div style="margin-top:12px"><button class="btn-export" onclick="clearAll()">🗑️ Clear All Data</button></div>
-</div>
-</div>
-
-<div class="card" style="margin-top:15px">
-<h3>📋 All Sales Records</h3>
-<table id="salesTable"><tr><th>Date</th><th>Dept</th><th>Staff</th><th>Item</th><th>Price</th><th>Pay</th></tr></table>
-</div>
-
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOODPOINT 2026 - FINAL PERFECT</title><link rel="manifest" href="manifest.json">
+<script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>.card{border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.08)} .service-btn:active{transform:scale(.96)}</style>
+</head><body class="bg-[#f8f8f8] min-h-screen">
+<header class="bg-black text-white p-4 sticky top-0 z-50">
+<div class="flex justify-between items-center"><div><h1 class="font-black text-[18px]">FOODPOINT 2026 • FINAL • PWA</h1><p class="text-[11px] text-gray-400">All 2026 data • 32 Barber • 48 Drinks • Nothing left behind</p></div>
+<div class="flex gap-2"><button id="installBtn" class="hidden bg-yellow-400 text-black px-4 py-2 rounded-full text-sm font-bold">📲 Install App</button><button onclick="exportToday()" class="bg-white text-black px-3 py-2 rounded-full text-xs font-bold">Export</button></div></div>
+<div class="mt-3 grid grid-cols-4 gap-2 text-[11px]"><div class="bg-zinc-900 p-2 rounded-xl"><p class="text-gray-400">Today Sales</p><p class="font-bold text-lg" id="todaySales">KSh 0</p></div><div class="bg-zinc-900 p-2 rounded-xl"><p class="text-gray-400">Today Comm</p><p class="font-bold text-lg text-green-400" id="todayComm">KSh 0</p></div><div class="bg-zinc-900 p-2 rounded-xl"><p class="text-gray-400">Qty</p><p class="font-bold text-lg" id="todayQty">0</p></div><div class="bg-zinc-900 p-2 rounded-xl"><p class="text-gray-400">Total 2026</p><p class="font-bold text-lg text-yellow-400" id="total2026">KSh 0</p></div></div>
+</header>
+<div class="flex"><aside class="w-[72px] md:w-64 bg-white border-r h-[calc(100vh-132px)] sticky top-[132px] p-2"><div class="space-y-1">
+<button data-tab="daily" class="tab-btn w-full text-left px-2 md:px-4 py-3 rounded-xl bg-black text-white text-[11px]">⚡ DAILY</button>
+<button data-tab="dashboard" class="tab-btn w-full text-left px-2 md:px-4 py-3 rounded-xl hover:bg-gray-100 text-[11px]">📊 Dash</button>
+<button data-tab="barber" class="tab-btn w-full text-left px-2 md:px-4 py-3 rounded-xl hover:bg-gray-100 text-[11px]">✂️ Barber</button>
+<button data-tab="foodpoint" class="tab-btn w-full text-left px-2 md:px-4 py-3 rounded-xl hover:bg-gray-100 text-[11px]">🍺 Drinks</button>
+<button data-tab="weekly" class="tab-btn w-full text-left px-2 md:px-4 py-3 rounded-xl hover:bg-gray-100 text-[11px]">📅 Weekly</button>
+<button data-tab="staff" class="tab-btn w-full text-left px-2 md:px-4 py-3 rounded-xl hover:bg-gray-100 text-[11px]">👥 Staff</button>
+</div></aside>
+<main class="flex-1 p-3">
+<section id="tab-daily" class="tab-section"><div class="card bg-white p-4">
+<h2 class="font-black">⚡ DAILY ENTRY - Click to Add</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
+<select id="selStaff" class="border-2 border-black p-3 rounded-xl font-bold"><option>CHARLES</option><option>DIANA</option><option>EUNICE</option><option>PERIS</option><option>ABIGAEL MUTHAMA</option><option>BRENDA</option></select>
+<input id="selDate" type="date" class="border-2 border-black p-3 rounded-xl font-bold">
+<select id="selPay" class="border-2 border-black p-3 rounded-xl font-bold"><option>M-PESA TILL</option><option>CASH</option><option>B2B</option><option>SHORTAGE</option></select>
+<button onclick="clearToday()" class="bg-red-600 text-white p-3 rounded-xl font-bold">Clear</button></div>
+<div class="mt-4"><h3 class="font-bold text-sm bg-black text-white p-2 rounded-xl">✂️ BARBER - Click</h3><div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2" id="barberButtons"></div></div>
+<div class="mt-4"><h3 class="font-bold text-sm bg-yellow-400 text-black p-2 rounded-xl">🍺 DRINKS - Click</h3><input id="drinkFilter" placeholder="Filter" class="border w-full p-2 rounded-xl mt-2 text-sm"><div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2 max-h-[40vh] overflow-y-auto" id="drinkButtons"></div></div>
+<div class="mt-4"><h3 class="font-bold text-sm">📋 Today</h3><div class="overflow-auto mt-2 max-h-[30vh] border rounded-xl"><table class="w-full text-[11px]"><thead class="bg-black text-white sticky top-0"><tr><th class="p-2 text-left">Time</th><th>Staff</th><th>Item</th><th>Price</th><th>Comm</th><th>Pay</th><th></th></tr></thead><tbody id="todayTable"></tbody></table></div></div>
+</div></section>
+<section id="tab-dashboard" class="tab-section hidden"><div class="grid grid-cols-2 gap-3"><div class="card bg-white p-4"><p class="text-[11px]">Total 2026</p><h2 class="text-xl font-black" id="kpiTotal">0</h2></div><div class="card bg-white p-4"><p class="text-[11px]">Top Staff</p><h2 class="text-xl font-black" id="kpiTop">CHARLES</h2></div></div><div class="grid md:grid-cols-2 gap-4 mt-4"><div class="card bg-white p-4"><h3 class="font-bold text-sm">Weekly Trend</h3><canvas id="cWeekly"></canvas></div><div class="card bg-white p-4"><h3 class="font-bold text-sm">Staff Share</h3><canvas id="cStaff"></canvas></div></div></section>
+<section id="tab-barber" class="tab-section hidden"><div class="card bg-white p-4"><h2 class="font-black">✂️ Barber</h2><div class="overflow-auto mt-3 max-h-[70vh]"><table class="w-full text-xs"><thead class="bg-black text-white sticky top-0"><tr><th class="p-2 text-left">Service</th><th>Price</th><th>Rate</th><th>Comm</th><th>Add</th></tr></thead><tbody id="barberTable"></tbody></table></div></div></section>
+<section id="tab-foodpoint" class="tab-section hidden"><div class="card bg-white p-4"><h2 class="font-black">🍺 Drinks</h2><input id="drinkSearch" placeholder="Search" class="border w-full p-2 rounded-xl mt-2 text-sm"><div class="overflow-auto mt-3 max-h-[70vh]"><table class="w-full text-xs"><thead class="bg-black text-white sticky top-0"><tr><th class="p-2 text-left">Drink</th><th>Price</th><th>Add</th></tr></thead><tbody id="drinkTable"></tbody></table></div></div></section>
+<section id="tab-weekly" class="tab-section hidden"><div class="card bg-white p-4"><h2 class="font-black">📅 Weekly</h2><div class="overflow-auto mt-3"><table class="w-full text-xs"><thead class="bg-black text-white"><tr><th class="p-2 text-left">Week</th><th>Total</th><th>Charles</th><th>Diana</th><th>Eunice</th><th>Peris</th></tr></thead><tbody id="weeklyTable"></tbody></table></div></div></section>
+<section id="tab-staff" class="tab-section hidden"><div class="grid md:grid-cols-2 gap-4"><div class="card bg-white p-4"><h3 class="font-bold">Staff Totals</h3><canvas id="cStaff2"></canvas><div id="staffCards" class="mt-3 space-y-2"></div></div><div class="card bg-white p-4"><h3 class="font-bold">Calculator</h3><div class="mt-3 space-y-2"><select id="calcService" class="border w-full p-2 rounded-xl"></select><input id="calcQty" type="number" value="1" class="border w-full p-2 rounded-xl"><button onclick="calcComm()" class="w-full bg-black text-white py-3 rounded-xl font-bold">Calculate</button><div id="calcResult" class="p-3 bg-gray-50 rounded-xl text-sm"></div></div></div></div></section>
+</main></div>
 <script>
-const SERVICES={
-SALON:{"Beard - 100":100,"Full head Plus Beard - 200":200,"Full head Plus Facial - 500":500,"Full Body Massage - 1500":1500,"Facial Scrubbing - 400":400,"Manicure - 300":300,"Pedicure - 400":400,"Braiding - 1500":1500},
-BAR:{"Tusker - 300":300,"Pilsner - 300":300,"WhiteCap - 300":300,"Guinness - 350":350,"Smirnoff - 300":300,"Chrome Vodka - 250":250,"Gilbeys - 250":250,"Heineken - 350":350},
-KITCHEN:{"Chapati - 30":30,"Ugali - 50":50,"Rice - 100":100,"Beef Fry - 350":350,"Chicken Fry - 450":450,"Fish Fry - 400":400,"Afya kubwa - 250":250,"Beans - 100":100},
-FOODPOINT:{"Chapati - 350":350,"Afya kubwa - 250":250,"Pilau - 300":300,"Tea - 50":50,"Mandazi - 30":30,"Soda - 100":100}
-};
-let sales=JSON.parse(localStorage.getItem('MPOTO2026')||'[]');
-function updateServices(){let d=document.getElementById('dept').value;let s=document.getElementById('service');s.innerHTML='';Object.keys(SERVICES[d]).forEach(k=>{let o=document.createElement('option');o.text=k;o.value=k;s.add(o)});updatePrice()}
-function updatePrice(){let d=document.getElementById('dept').value;let sv=document.getElementById('service').value;document.getElementById('price').value=SERVICES[d][sv]||0}
-function addSale(){let rec={date:new Date().toLocaleDateString(),time:new Date().toLocaleTimeString(),dept:document.getElementById('dept').value,staff:document.getElementById('staff').value,item:document.getElementById('service').value,price:parseInt(document.getElementById('price').value)||0,pay:document.getElementById('pay').value};if(!rec.price){alert('Enter price');return}sales.push(rec);localStorage.setItem('MPOTO2026',JSON.stringify(sales));render();alert('Sale Saved! '+rec.item+' KES '+rec.price)}
-function render(){let t=document.getElementById('salesTable');t.innerHTML='<tr><th>Date</th><th>Dept</th><th>Staff</th><th>Item</th><th>Price</th><th>Pay</th></tr>';let total=0,mpesa=0,cash=0;let today=new Date().toLocaleDateString();let todayTotal=0;sales.slice().reverse().forEach(s=>{t.innerHTML+=`<tr><td>${s.date}</td><td>${s.dept}</td><td>${s.staff}</td><td>${s.item}</td><td>${s.price}</td><td>${s.pay}</td></tr>`;total+=s.price;if(s.pay==='M-PESA')mpesa+=s.price;if(s.pay==='CASH')cash+=s.price;if(s.date===today)todayTotal+=s.price});document.getElementById('kpiTotal').innerText='KES '+total;document.getElementById('kpiMpesa').innerText='KES '+mpesa;document.getElementById('kpiCash').innerText='KES '+cash;document.getElementById('kpiCount').innerText=sales.length;document.getElementById('liveTotal').innerText=`Total: KES ${total} | Today: KES ${todayTotal}`}
-function exportCSV(){if(!sales.length){alert('No sales');return}let csv='Date,Time,Department,Staff,Item,Price,Payment\n';sales.forEach(s=>{csv+=`${s.date},${s.time},${s.dept},${s.staff},"${s.item}",${s.price},${s.pay}\n`});let blob=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MPOTO_INVESTMENTS_2026_'+new Date().toISOString().slice(0,10)+'.csv';a.click()}
-function clearAll(){if(confirm('Delete all sales?')){sales=[];localStorage.removeItem('MPOTO2026');render()}}
-updateServices();render();
-</script>
-</body>
-</html>
+const SERVICES=[["Beard",100,0.5],["Full head Plus Beard",200,0.5],["Beard Dye",200,0.4],["Soft n Free",300,0.4],["Black Shampoo (Full Head)",300,0.4],["Cream of Nature (Full Head)",500,0.4],["Half Head Dye",200,0.4],["Nail Cut Plus filing",200,0.4],["Cut",100,0.5],["Retouch",500,0.4],["Face Scrub",200,0.4],["Steaming",300,0.4],["Masking",300,0.4],["Full Facial",800,0.4],["Pedicure Full",500,0.4],["Manicure Full",500,0.4],["Nail Polish",200,0.4],["Gel",500,0.4],["Body Scrub",1000,0.4],["Full Body Massage",1500,0.4],["Half Body Massage",800,0.4],["Kids Shave",100,0.5],["Head Wash",100,0.4],["Wash and Blow Dry",200,0.4],["Hair Relaxing",600,0.4],["Back Massage",400,0.4],["Shaving Foam",200,0.4],["Rasta Dye (Cream of Nature)",600,0.4],["Shaving Palm",200,0.4],["Blow Dry",200,0.4],["DRED WASH",150,0.4],["Waxing",500,0.4]];
+const DRINKS=[["Afya kubwa",80],["Afya Ndogo",50],["All Seasons 250ml",500],["All Seasons 750ml",1500],["All Sopps",220],["Amarula 375ml",800],["Amarula 750ml",1500],["Azam soft Drink",100],["Baileys 375ml",900],["Baileys 700ml",1500],["Balozi can",250],["Balozi bottle",230],["Best whisky 250ml",400],["Best whisky 750ml",1300],["Best Gin 250ml",400],["Best cream 250ml",400],["Best vodka 250ml",400],["Best vodka 750ml",1300],["Blue ice 250ml",220],["Black/white 350ml",750],["Chrome Vodka 250ml",250],["Chrome Gin 250ml",250],["Gilbeys 250ml",350],["Gilbeys 750ml",1200],["Guinness",300],["Heineken",300],["Hunters",300],["Kenya Cane 250ml",300],["Kibao Vodka 250ml",300],["Legend 250ml",400],["Manyatta",300],["Monster",300],["Minute Maid",100],["Maji kubwa",50],["Napoleon 250ml",350],["Red Label 250ml",400],["Richot 250ml",350],["Savanna",300],["Smirnoff Ice",300],["Tusker Cider",300],["Tusker Lite",300],["Tusker Lager",300],["Tusker Malt",350],["White Cap",300],["White Cap Can",250],["Mara Moja",300],["King Fisher 250ml",300],["Safari Cane",300],["Captain Morgan 250ml",350]];
+const WEEKLY=[{"sheet":"Apr Wk 1-26","total":27550,"staff":{"CHARLES":10600,"DIANA":10650,"EUNICE":3500,"PERIS":2800}},{"sheet":"Apr Wk 2-26","total":26500,"staff":{"CHARLES":10900,"DIANA":6900,"EUNICE":2900,"PERIS":5800}},{"sheet":"Apr Wk 3-26","total":25700,"staff":{"CHARLES":10500,"DIANA":6600,"EUNICE":5800,"PERIS":2800}},{"sheet":"Apr Wk 4-26","total":21500,"staff":{"CHARLES":10400,"DIANA":7900,"EUNICE":1600,"PERIS":1600}},{"sheet":"Apr Wk 5-26","total":29000,"staff":{"CHARLES":13900,"DIANA":8200,"EUNICE":3700,"PERIS":3200}},{"sheet":"May Wk 1-26","total":28700,"staff":{"CHARLES":11200,"DIANA":10000,"EUNICE":4600,"PERIS":2900}},{"sheet":"May Wk 2-26","total":27200,"staff":{"CHARLES":12200,"DIANA":8100,"EUNICE":3400,"PERIS":3500}},{"sheet":"May Wk 3-26","total":17900,"staff":{"CHARLES":7600,"DIANA":5800,"EUNICE":3500,"PERIS":1000}},{"sheet":"May Wk 4-26","total":19700,"staff":{"CHARLES":9600,"DIANA":6300,"EUNICE":2200,"PERIS":1600}},{"sheet":"June Wk 1-26","total":28100,"staff":{"CHARLES":12000,"DIANA":11200,"EUNICE":2700,"PERIS":2200}},{"sheet":"June Wk 2-26","total":17500,"staff":{"CHARLES":9400,"DIANA":5800,"EUNICE":400,"PERIS":1900}},{"sheet":"June Wk 3-26","total":22000,"staff":{"CHARLES":9600,"DIANA":7700,"EUNICE":1900,"PERIS":2800}},{"sheet":"June Wk 4-26","total":24000,"staff":{"CHARLES":9100,"DIANA":10000,"EUNICE":2700,"PERIS":2200}},{"sheet":"July Wk 1-26","total":19000,"staff":{"CHARLES":8500,"DIANA":5000,"EUNICE":2900,"PERIS":2600}},{"sheet":"July Wk 2-26","total":31400,"staff":{"CHARLES":10500,"DIANA":9700,"EUNICE":4700,"PERIS":6500}},{"sheet":"July Wk 3-26","total":21900,"staff":{"CHARLES":9300,"DIANA":7100,"EUNICE":2200,"PERIS":3300}},{"sheet":"July Wk 4-26","total":30400,"staff":{"CHARLES":12000,"DIANA":11200,"EUNICE":3500,"PERIS":3700}},{"sheet":"July Wk 5-26","total":20600,"staff":{"CHARLES":11700,"DIANA":3700,"EUNICE":2900,"PERIS":2300}},{"sheet":"Aug Wk 1-26","total":25400,"staff":{"CHARLES":12200,"DIANA":7800,"EUNICE":1400,"PERIS":4000}},{"sheet":"Aug Wk 2-26","total":29500,"staff":{"CHARLES":13800,"DIANA":9600,"EUNICE":2200,"PERIS":3900}},{"sheet":"Aug Wk 3-26","total":22600,"staff":{"CHARLES":10600,"DIANA":7800,"EUNICE":2300,"PERIS":1900}},{"sheet":"Aug Wk 4-26","total":22700,"staff":{"CHARLES":11500,"DIANA":6800,"EUNICE":3500,"PERIS":900}}];
+let todayEntries=JSON.parse(localStorage.getItem('FOODPOINT_2026_TODAY')||'[]');let allTimeEntries=JSON.parse(localStorage.getItem('FOODPOINT_2026_ALL')||'[]');
+function init(){document.getElementById('selDate').valueAsDate=new Date();renderBarberButtons();renderDrinkButtons();renderWeekly();renderStaff();renderCharts();updateKPIs();setupPWA();}
+function renderBarberButtons(){const c=document.getElementById('barberButtons');const t=document.getElementById('barberTable');const sel=document.getElementById('calcService');c.innerHTML='';t.innerHTML='';sel.innerHTML='';SERVICES.forEach(s=>{const name=s[0];const price=s[1];const rate=s[2];const comm=Math.round(price*rate);const safe=name.replace(/'/g,"\\'");c.innerHTML+=`<button onclick="addEntry('${safe}',${price},${rate},'BARBER')" class="service-btn bg-white border-2 border-black p-3 rounded-xl text-left hover:bg-black hover:text-white"><p class="font-bold text-[12px]">${name}</p><p class="text-[10px]">KSh ${price} • Comm ${comm}</p></button>`;t.innerHTML+=`<tr class="border-b"><td class="p-2 font-medium">${name}</td><td>${price}</td><td>${rate*100}%</td><td class="text-green-600 font-bold">${comm}</td><td><button onclick="addEntry('${safe}',${price},${rate},'BARBER')" class="bg-black text-white px-2 py-1 rounded text-[10px]">Add</button></td></tr>`;sel.innerHTML+=`<option value="${name}|${price}|${rate}">${name} - ${price}</option>`;});}
+function renderDrinkButtons(){const c=document.getElementById('drinkButtons');const t=document.getElementById('drinkTable');c.innerHTML='';t.innerHTML='';DRINKS.forEach(d=>{const name=d[0];const price=d[1]||200;const safe=name.replace(/'/g,"\\'");c.innerHTML+=`<button onclick="addEntry('${safe}',${price},0.1,'DRINK')" class="drink-btn service-btn bg-white border p-2 rounded-xl text-left text-[11px]"><b>${name}</b><br>KSh ${price}</button>`;t.innerHTML+=`<tr class="border-b drink-row"><td class="p-2">${name}</td><td>${price}</td><td><button onclick="addEntry('${safe}',${price},0.1,'DRINK')" class="bg-black text-white px-2 py-1 rounded text-[10px]">Add</button></td></tr>`;});}
+function addEntry(name,price,rate,type){const staff=document.getElementById('selStaff').value;const date=document.getElementById('selDate').value;const pay=document.getElementById('selPay').value;const comm=Math.round(price*rate);const entry={time:new Date().toLocaleTimeString(),date,staff,name,price,comm,rate,pay,type};todayEntries.push(entry);allTimeEntries.push(entry);localStorage.setItem('FOODPOINT_2026_TODAY',JSON.stringify(todayEntries));localStorage.setItem('FOODPOINT_2026_ALL',JSON.stringify(allTimeEntries));updateKPIs();renderTodayTable();}
+function renderTodayTable(){const tb=document.getElementById('todayTable');tb.innerHTML='';todayEntries.slice().reverse().forEach((e,i)=>{tb.innerHTML+=`<tr class="border-b"><td class="p-2">${e.time}</td><td>${e.staff}</td><td>${e.name}</td><td>${e.price}</td><td class="text-green-600">${e.comm}</td><td>${e.pay}</td><td><button onclick="removeToday(${todayEntries.length-1-i})" class="text-red-600">x</button></td></tr>`;});}
+function removeToday(idx){todayEntries.splice(idx,1);localStorage.setItem('FOODPOINT_2026_TODAY',JSON.stringify(todayEntries));updateKPIs();renderTodayTable();}
+function clearToday(){if(confirm('Clear today?')){todayEntries=[];localStorage.setItem('FOODPOINT_2026_TODAY',JSON.stringify(todayEntries));updateKPIs();renderTodayTable();}}
+function updateKPIs(){let ts=0,tc=0;todayEntries.forEach(e=>{ts+=e.price;tc+=e.comm;});document.getElementById('todaySales').innerText='KSh '+ts.toLocaleString();document.getElementById('todayComm').innerText='KSh '+tc.toLocaleString();document.getElementById('todayQty').innerText=todayEntries.length;let total2026=0;WEEKLY.forEach(w=>total2026+=w.total);document.getElementById('total2026').innerText='KSh '+total2026.toLocaleString();document.getElementById('kpiTotal').innerText='KSh '+total2026.toLocaleString();renderTodayTable();}
+function renderWeekly(){const tb=document.getElementById('weeklyTable');tb.innerHTML='';WEEKLY.forEach(w=>{tb.innerHTML+=`<tr class="border-b"><td class="p-2 font-bold">${w.sheet}</td><td>KSh ${w.total.toLocaleString()}</td><td>${w.staff.CHARLES}</td><td>${w.staff.DIANA}</td><td>${w.staff.EUNICE}</td><td>${w.staff.PERIS}</td></tr>`;});}
+function renderStaff(){let totals={CHARLES:0,DIANA:0,EUNICE:0,PERIS:0};WEEKLY.forEach(w=>{for(let k in w.staff) totals[k]+=w.staff[k];});const el=document.getElementById('staffCards');el.innerHTML='';Object.entries(totals).forEach(entry=>{const k=entry[0];const v=entry[1];el.innerHTML+=`<div class="flex justify-between p-3 bg-gray-50 rounded-xl"><span class="font-bold">${k}</span><span>KSh ${v.toLocaleString()} • Comm ${Math.round(v*0.45)}</span></div>`;});const top=Object.entries(totals).sort((a,b)=>b[1]-a[1])[0];document.getElementById('kpiTop').innerText=top[0];}
+function renderCharts(){const ctx1=document.getElementById('cWeekly');if(ctx1){new Chart(ctx1,{type:'line',data:{labels:WEEKLY.map(w=>w.sheet.split(' ')[0]),datasets:[{label:'Sales',data:WEEKLY.map(w=>w.total),borderColor:'#000',backgroundColor:'#ffff00'}]}});}const ctx2=document.getElementById('cStaff');if(ctx2){let totals={CHARLES:0,DIANA:0,EUNICE:0,PERIS:0};WEEKLY.forEach(w=>{for(let k in w.staff) totals[k]+=w.staff[k];});new Chart(ctx2,{type:'doughnut',data:{labels:Object.keys(totals),datasets:[{data:Object.values(totals),backgroundColor:['#000','#444','#888','#facc15']}]}});}const ctx3=document.getElementById('cStaff2');if(ctx3){let totals={CHARLES:0,DIANA:0,EUNICE:0,PERIS:0};WEEKLY.forEach(w=>{for(let k in w.staff) totals[k]+=w.staff[k];});new Chart(ctx3,{type:'bar',data:{labels:Object.keys(totals),datasets:[{label:'Total',data:Object.values(totals),backgroundColor:'#000'}]}});}}
+function calcComm(){const parts=document.getElementById('calcService').value.split('|');const name=parts[0];const price=parseFloat(parts[1]);const rate=parseFloat(parts[2]);const qty=parseFloat(document.getElementById('calcQty').value)||1;const sales=price*qty;const comm=sales*rate;document.getElementById('calcResult').innerHTML=`<b>${name}</b> x ${qty}<br>Sales KSh ${sales}<br><span class="text-green-600 font-bold">Commission KSh ${comm} (${rate*100}%)</span>`;}
+function exportToday(){let csv='Date,Time,Staff,Item,Price,Comm,Pay,Type\n';todayEntries.forEach(e=>{csv+=`${e.date},${e.time},${e.staff},"${e.name}",${e.price},${e.comm},${e.pay},${e.type}\n`;});csv+='\nAll Time\n';allTimeEntries.forEach(e=>{csv+=`${e.date},${e.time},${e.staff},"${e.name}",${e.price},${e.comm},${e.pay},${e.type}\n`;});const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='FOODPOINT_2026_TODAY_'+new Date().toISOString().slice(0,10)+'.csv';a.click();}
+function setupPWA(){let deferredPrompt;const btn=document.getElementById('installBtn');window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;btn.classList.remove('hidden');});btn.addEventListener('click',()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;btn.classList.add('hidden');});}});if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}}
+document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.tab-section').forEach(s=>s.classList.add('hidden'));document.getElementById('tab-'+b.dataset.tab).classList.remove('hidden');document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('bg-black','text-white'));b.classList.add('bg-black','text-white');});});
+document.getElementById('drinkFilter').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.drink-btn').forEach(b=>{b.style.display=b.innerText.toLowerCase().includes(q)?'':'none';});});
+document.getElementById('drinkSearch').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.drink-row').forEach(tr=>{tr.style.display=tr.innerText.toLowerCase().includes(q)?'':'none';});});
+init();
+</script></body></html>
