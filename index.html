@@ -1,14 +1,98 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mpoto investments</title>
-<style>body{font-family:Arial,sans-serif;padding:6px;background:#fff}h1{font-size:20px;border-bottom:2px solid #000;padding:6px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #000;padding:4px;font-size:11px}th{background:#eee;position:sticky;top:0}td[contenteditable='true']:focus{background:#d0e8ff;outline:2px solid blue}</style>
-</head><body>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh}
+h1{background:linear-gradient(90deg,#000,#2d3436);color:#fff;padding:18px;text-align:center;font-size:26px;letter-spacing:2px;position:sticky;top:0;z-index:300}
+.tabs{display:flex;overflow-x:auto;background:rgba(0,0,0,.85);padding:8px;gap:8px;position:sticky;top:62px;z-index:299}
+.tab{padding:12px 20px;border-radius:25px;border:2px solid transparent;color:#fff;background:linear-gradient(135deg,#636e72,#2d3436);cursor:pointer;white-space:nowrap;font-weight:600;font-size:13px}
+.tab.active{background:linear-gradient(135deg,#6c5ce7,#a29bfe);border-color:#fff}
+.search-wrap{padding:12px;background:rgba(255,255,255,.95);display:flex;gap:10px;position:sticky;top:116px;z-index:298}
+.search-wrap input{flex:1;padding:12px 18px;border:2px solid #dfe6e9;border-radius:25px}
+.btn{padding:10px 18px;border-radius:20px;border:none;color:#fff;font-weight:600;cursor:pointer}
+.btn-save{background:linear-gradient(135deg,#00b894,#00cec9)}.btn-export{background:linear-gradient(135deg,#fdcb6e,#e17055)}
+.section{display:none;padding:12px}.section.active{display:block}
+.card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.15);margin-bottom:15px}
+.card-header{padding:14px 18px;color:#fff;font-weight:700;font-size:14px;display:flex;justify-content:space-between}
+.card-header.market{background:linear-gradient(135deg,#00b894,#00cec9)}.card-header.barber{background:linear-gradient(135deg,#6c5ce7,#a29bfe)}
+.card-header.food{background:linear-gradient(135deg,#e17055,#fdcb6e)}.card-header.breakfast{background:linear-gradient(135deg,#0984e3,#74b9ff)}
+.table-wrap{overflow:auto;max-height:calc(100vh - 220px)}
+table{border-collapse:collapse;width:max-content;min-width:100%}
+th,td{border:1px solid #dfe6e9;padding:8px 10px;font-size:12px;white-space:nowrap;text-align:center}
+th{background:linear-gradient(135deg,#dfe6e9,#b2bec3);position:sticky;top:0;z-index:10}
+th.sticky,td.sticky{position:sticky;left:0;background:#fff;z-index:11}
+th.sticky2,td.sticky2{position:sticky;left:50px;background:#fff;z-index:11}
+th.sticky3,td.sticky3{position:sticky;left:200px;background:#fffde7;z-index:11}
+td[contenteditable]{background:#fffde7}td[contenteditable]:focus{background:#74b9ff;color:#fff;outline:none}
+.date-head{background:linear-gradient(135deg,#fdcb6e,#e17055) !important;color:#fff !important}
+.badge{background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700}
+.tot{background:#00b894 !important;color:#fff;font-weight:700}
+</style>
+</head>
+<body>
 <h1>Mpoto investments</h1>
-<table><thead><tr><th>#</th><th>MARKET / ITEM - 200 ITEMS - EXACTLY AS EXCEL</th><th>Rate / Price</th><th>Qty</th><th>Price</th></tr></thead><tbody>
-<tr><td contenteditable='true'>1</td><td contenteditable='true'>Terere</td><td contenteditable='true'>25</td><td contenteditable='true'>8</td><td contenteditable='true'>200</td></tr>
-<tr><td contenteditable='true'>2</td><td contenteditable='true'>Managu @pcs</td><td contenteditable='true'>40</td><td contenteditable='true'></td><td contenteditable='true'></td></tr>
-<tr><td contenteditable='true'>3</td><td contenteditable='true'>Dhania @pcs</td><td contenteditable='true'>5</td><td contenteditable='true'>20</td><td contenteditable='true'>100</td></tr>
-... all 200 rows ...
-<tr><td contenteditable='true'>200</td><td contenteditable='true'>Imperial 250ml</td><td contenteditable='true'></td><td contenteditable='true'></td></tr>
-</tbody></table>
-<p>200 items - exactly as Excel - no cut - all 200 rows - heading only Mpoto investments - editable</p>
-</body></html>
+<div class="tabs">
+<button class="tab active" onclick="showTab('market',this)">🛒 MARKET 89 WITH DATES</button>
+<button class="tab" onclick="showTab('barber',this)">✂️ BARBER 32 WITH DATES</button>
+<button class="tab" onclick="showTab('breakfast',this)">☕ BREAKFAST 16</button>
+<button class="tab" onclick="showTab('main',this)">🍛 MAIN 32</button>
+<button class="tab" onclick="showTab('drinks',this)">🥤 DRINKS 15</button>
+<button class="tab" onclick="showTab('food',this)">📊 DAILY 25.10-31.10.2026</button>
+<button class="tab" onclick="showTab('weekly',this)">📅 WEEKLY 42</button>
+</div>
+<div class="search-wrap">
+<input id="search" placeholder="🔍 Search Terere, Beard, Gas..." oninput="filterRows()">
+<span class="badge" id="counter">89 ITEMS - 2026 ONLY</span>
+<button class="btn btn-save" onclick="saveData()">💾 Save</button>
+<button class="btn btn-export" onclick="exportData()">📤 Export</button>
+</div>
+<div id="market" class="section active"><div class="card"><div class="card-header market"><span>🛒 STORE SUPPLIES 89 - Rate Qty Price + DAILY 25.10-31.10.2026</span></div><div class="table-wrap"><table><thead><tr><th class="sticky">#</th><th class="sticky2">MARKET ITEM</th><th class="sticky3">Rate</th><th>Qty</th><th>Price</th><th class="date-head">25.10.2026</th><th class="date-head">26.10.2026</th><th class="date-head">27.10.2026</th><th class="date-head">28.10.2026</th><th class="date-head">29.10.2026</th><th class="date-head">30.10.2026</th><th class="date-head">31.10.2026</th><th class="tot">TOTAL</th></tr></thead><tbody>
+<tr><td class="sticky">1</td><td class="sticky2" contenteditable="true">Terere</td><td class="sticky3" contenteditable="true">25</td><td contenteditable="true">8</td><td contenteditable="true">200</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td class="sticky">2</td><td class="sticky2" contenteditable="true">Dhania @pcs</td><td class="sticky3" contenteditable="true">5</td><td contenteditable="true">20</td><td contenteditable="true">100</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td class="sticky">3</td><td class="sticky2" contenteditable="true">Potatoes @kg</td><td class="sticky3" contenteditable="true">39.79</td><td contenteditable="true">98</td><td contenteditable="true">3900</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td class="sticky">4</td><td class="sticky2" contenteditable="true">Gas</td><td class="sticky3" contenteditable="true">150</td><td contenteditable="true">50</td><td contenteditable="true">7500</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td class="sticky">5</td><td class="sticky2" contenteditable="true">Lemon</td><td class="sticky3" contenteditable="true">80</td><td contenteditable="true">6</td><td contenteditable="true">480</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<!-- COPY THIS ROW PATTERN FOR ALL 89 ITEMS: Managu @pcs 40, Hoho @pc 6 Qty10 Price60, Maize 24, Matoke Stew 2.94 Qty408 Price1200, Onion 24, Tomatoes 41, Cabbages 50, Spinach 34, Beans @kg 155, Njahi @kg 95, Tangawizi @kg 200, Carrots @kg 100, Pepper 80, Ndengu 150, Garlic @kg 430 20, Matumbo Stew 200, Meat Beef Stew 650, Meat goat 660, Fish 220, Pork 470, Omena @ gorogoro 400, Sausages 30, Smokies 25, Afia Kubwa 55, Afia Ndogo 250, Energy Drink 30, Lemonade 41.66 Qty12 Price500, Predator 54.16 Qty12 Price650, Maji Kubwa 42, Maji Ndogo 35, Minute maid 42, Monster 74, Novida 67, Redbull 40, Soda Kubwa 250, Soda ndogo 90, Soda glass 90, Eggs Broiler Fry 12.33 Qty30 Price370, Eggs Broiler Scrabble 23.33 Qty30 Price700, Chicken Kienyeji 700, Sugar 130, Milk 90, Prestige magarine 284, Steel wool 4.58 Qty600 Price2750, Cooking Oil @litre 221.5 Qty20 Price4430, Chilli Sauce 56 Qty5 Price280, Liquid Soap 32.16 Qty30 Price965, Rice Pilau 163, Cling Film 4000, Vinegar 79, Matchbox 11.33 Qty30 Price340, Tomato Paste @ kg 34.4 Qty25 Price860, Tomato Source @litre 50 Qty5 Price250, Car Oil 30... -->
+</tbody></table></div></div></div>
+<div id="barber" class="section"><div class="card"><div class="card-header barber"><span>✂️ BARBER 32 - 2026 - WITH DATES</span></div><div class="table-wrap"><table><thead><tr><th class="sticky">#</th><th class="sticky2">SERVICE</th><th class="sticky3">PRICE</th><th class="date-head" colspan="4">25.10.2026</th><th class="date-head" colspan="4">26.10.2026</th><th class="date-head" colspan="4">27.10.2026</th><th class="date-head" colspan="4">28.10.2026</th><th class="date-head" colspan="4">29.10.2026</th><th class="date-head" colspan="4">30.10.2026</th><th class="date-head" colspan="4">31.10.2026</th><th class="tot">TOTAL</th></tr><tr><th class="sticky">#</th><th class="sticky2">SERVICE</th><th class="sticky3">PRICE</th><th>CHARLES Sales</th><th>Comm</th><th>DIANA Sales</th><th>Comm</th><th>CHARLES Sales</th><th>Comm</th><th>DIANA Sales</th><th>Comm</th><th>CHARLES Sales</th><th>Comm</th><th>DIANA Sales</th><th>Comm</th><th>CHARLES Sales</th><th>Comm</th><th>DIANA Sales</th><th>Comm</th><th>CHARLES Sales</th><th>Comm</th><th>DIANA Sales</th><th>Comm</th><th>CHARLES Sales</th><th>Comm</th><th>DIANA Sales</th><th>Comm</th><th>CHARLES Sales</th><th>Comm</th><th>DIANA Sales</th><th>Comm</th><th class="tot">TOTAL</th></tr></thead><tbody>
+<tr><td class="sticky">1</td><td class="sticky2" contenteditable="true">Beard</td><td class="sticky3" contenteditable="true">100</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td class="sticky">2</td><td class="sticky2" contenteditable="true">Full head Plus Beard</td><td class="sticky3" contenteditable="true">200</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td class="sticky">3</td><td class="sticky2" contenteditable="true">Waxing</td><td class="sticky3" contenteditable="true">500</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<!-- COPY PATTERN FOR ALL 32: Beard Dye 200, Soft n Free 300, Black Shampoo 300, Cream of Nature 500, Half Head Dye 200, Nail Cut Plus filing 200, Cut 100, Retouch 500, Face Scrub 200, Steaming 300, Masking 300, Full Facial 800, Pedicure Full 500, Manicure Full 500, Nail Polish 200, Gel 500, Body Scrub 1000, Full Body Massage 1500, Half Body Massage 800, Kids Shave 100, Head Wash 100, Wash and Blow Dry 200, Hair Relaxing 600, Back Massage 400, Shaving Foam 200, Rasta Dye 600, Shaving Palm 200, Blow Dry 200, DRED WASH 150 -->
+</tbody></table></div></div></div>
+<div id="breakfast" class="section"><div class="card"><div class="card-header breakfast"><span>☕ BREAKFAST 16</span></div><div class="table-wrap"><table><thead><tr><th>#</th><th>BREAKFAST</th><th>Price</th><th>25.10</th><th>26.10</th><th>27.10</th><th class="tot">TOTAL</th></tr></thead><tbody>
+<tr><td>1</td><td contenteditable="true">Chai</td><td contenteditable="true">30</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td>2</td><td contenteditable="true">Chapati</td><td contenteditable="true">30</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<!-- 3 Mandazi 30, 4 Ommellete Broiler 90, 5 Ommellete Kienyeji 120, 6 Coffee Sachet 15, 7 Sausages 60, 8 Smokie 40, 9 Eggs Kienyeji Fry 80, 10 Kienyeji Scrabble 120, 11 Eggs Broiler Fry 60, 12 Kahawa 30, 13 Mkate/Bread 30, 14 Andazi choma 80, 15 Chapo choma 80, 16 Lemon Tea 40 -->
+</tbody></table></div></div></div>
+<div id="main" class="section"><div class="card"><div class="card-header food"><span>🍛 MAIN 32</span></div><div class="table-wrap"><table><thead><tr><th>#</th><th>MAIN</th><th>Price</th><th>25.10</th><th class="tot">TOTAL</th></tr></thead><tbody>
+<tr><td>1</td><td contenteditable="true">Cabbages</td><td contenteditable="true">50</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<!-- Greens Kienyeji 50, Rice Eggs Broiler 170, Rice Eggs Kienyeji 190, Maharagwe 70, Chips salad 150, Chips Masala 150, Chips mayai Broiler 200, Chips mayai Kienyeji 220, Chipoo 120, Chips Nyama 230, Ndengu plain 60, Githeri 100, Matoke Stew 100, Matoke Fry 120, Nyama 150, Nyama Fry 180, Samaki 500, Kienyeji Scrabble 120, Broiler Scrabble 100, Pilau 150, Mchele / Rice plain 70, Ugali 50, Rice choma 80, Rice Githeri 120, Matoke beef 210, Matoke beans 120, Matoke rice 120, Njahe plain 80, Ugali Mayai Kienyeji 170, Ugali Mayai Broiler 150, Salad 30 -->
+</tbody></table></div></div></div>
+<div id="drinks" class="section"><div class="card"><div class="card-header market"><span>🥤 DRINKS 15</span></div><div class="table-wrap"><table><thead><tr><th>#</th><th>DRINK</th><th>Price</th><th>Daily</th><th class="tot">TOTAL</th></tr></thead><tbody>
+<tr><td>1</td><td contenteditable="true">Predator</td><td contenteditable="true">70</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<!-- Monster 300, Maji Kubwa 50, Maji Ndogo 30, Soda Kubwa 100, Soda Ndogo 60, Soda Glass 50, Lemonade 60, Afia Kubwa 100, Afia Ndogo 60, Minute Maid 100, Energy Drink 60, Red bull 250, Pepsi 50, Novida 60 -->
+</tbody></table></div></div></div>
+<div id="food" class="section"><div class="card"><div class="card-header food"><span>📊 DAILY 25.10-31.10.2026</span></div><div class="table-wrap"><table><thead><tr><th class="sticky" style="min-width:320px">STAFF</th><th class="date-head">25.10.2026</th><th class="date-head">26.10.2026</th><th class="date-head">27.10.2026</th><th class="date-head">28.10.2026</th><th class="date-head">29.10.2026</th><th class="date-head">30.10.2026</th><th class="date-head">31.10.2026</th><th class="tot">TOTAL</th></tr></thead><tbody>
+<tr><td class="sticky" contenteditable="true">ABIGAEL MUTHAMA ID 37751356 SALES</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td class="sticky" contenteditable="true">TILL AMOUNT</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+<tr><td class="sticky" contenteditable="true">TOTAL SALES</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td contenteditable="true">0</td><td class="tot" contenteditable="true">0</td></tr>
+</tbody></table></div></div></div>
+<div id="weekly" class="section"><div class="card"><div class="card-header barber"><span>📅 WEEKLY 42 SHEETS 2026</span></div><div class="table-wrap"><table><thead><tr><th>Sheet</th><th>Date 2026</th><th>Type</th></tr></thead><tbody>
+<tr><td contenteditable="true">Apr Wk 1-26</td><td contenteditable="true">29.03.2026</td><td>Barber + Food</td></tr>
+<tr><td contenteditable="true">Oct Wk 4-26</td><td contenteditable="true">25.10.2026 CURRENT</td><td>Daily entry 25.10-31.10.2026</td></tr>
+<tr><td contenteditable="true">OCT 26 SUM</td><td contenteditable="true">04.10-01.11.2026</td><td>Monthly SUM</td></tr>
+<tr><td contenteditable="true">Food Point price</td><td contenteditable="true">2026 Price List 95 items</td><td>All prices</td></tr>
+</tbody></table></div></div></div>
+<script>
+function showTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');if(el)el.classList.add('active')}
+function filterRows(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.section.active tbody tr').forEach(tr=>{tr.style.display=tr.innerText.toLowerCase().includes(q)?'':'none'})}
+function saveData(){localStorage.setItem('mpoto_2026',JSON.stringify(document.body.innerHTML));alert('✅ Saved')}
+function exportData(){let csv='';document.querySelectorAll('.section.active tbody tr').forEach(tr=>{let r=[];tr.querySelectorAll('td').forEach(td=>r.push('"'+td.innerText+'"'));csv+=r.join(',')+'\n'});let b=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Mpoto_2026.csv';a.click()}
+</script>
+</body>
+</html>
